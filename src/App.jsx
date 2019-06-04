@@ -13,6 +13,7 @@ class App extends Component {
       messages: messages
     }
     this.formUpdate = this.formUpdate.bind(this)
+    this.onEnterPress = this.onEnterPress.bind(this)
   }
 
   componentDidMount() {
@@ -35,6 +36,18 @@ class App extends Component {
     this.setState({messages: newMessageList})
   }
 
+  onEnterPress = (evt) => {
+    if(evt.keyCode == 13 && evt.shiftKey == false) {
+      evt.preventDefault()
+      const chatInput = evt.target.elements.chatInput.value
+      const userInput = evt.target.elements.userInput.value
+      console.log(userInput, chatInput)
+      const newMessage = {username: userInput, content: chatInput}
+      const newMessageList = this.state.messages.concat(newMessage)
+      this.setState({messages: newMessageList})
+    }
+  }
+
   render() {
 
     const messageList = this.state.messages.map(message => (
@@ -50,7 +63,7 @@ class App extends Component {
         <main className="messages">
         {messageList}
         </main>
-        <Chatbar formUpdate={this.formUpdate} />
+        <Chatbar formUpdate={this.formUpdate} onEnterPress={this.onEnterPress} />
       </div>
     );
     }
