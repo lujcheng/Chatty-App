@@ -13,11 +13,21 @@ class App extends Component {
     }
   }
 
+  
   render() {
+
+    const messageList = this.state.messages.map(message => (
+      <Message 
+        message={message} 
+        />
+    ))
+
     return (
       <div>
         <Navbar />
-        <Message messages={this.state.messages[0].content} />
+        <main className="messages">
+        {messageList}
+        </main>
         <Chatbar />
       </div>
     );
