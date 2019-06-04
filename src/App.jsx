@@ -9,15 +9,37 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
+      currentUser: "Anonymous",
       messages: messages
     }
+    this.formUpdate = this.formUpdate.bind(this)
   }
 
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages: messages})
+    }, 3000);
+  }
   
+  formUpdate = evt => {
+    evt.preventDefault()
+    const chatInput = evt.target.elements.chatInput.value
+    const userInput = evt.target.elements.userInput.value
+    console.log(userInput, chatInput)
+    const newMessage = {username: userInput, content: chatInput}
+    const newMessageList = this.state.messages.concat(newMessage)
+    this.setState({messages: newMessageList})
+  }
+
   render() {
 
     const messageList = this.state.messages.map(message => (
       <Message 
+        key={message.currentUser}
         message={message} 
         />
     ))
@@ -28,7 +50,7 @@ class App extends Component {
         <main className="messages">
         {messageList}
         </main>
-        <Chatbar />
+        <Chatbar formUpdate={this.formUpdate} />
       </div>
     );
     }

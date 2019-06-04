@@ -15,12 +15,17 @@ body {
   padding: 5px;
   position: fixed;
   right: 0;
+
+  .chatbar-form {
+    display:flex;
+    width: 100vw;
+  }
 }
 
 .chatbar-message,
 .chatbar-username {
   border: 1px solid black;
-  display: block;
+  display: inline-block;
   height: 40px;
   line-height: 40px;
   margin: 5px;
