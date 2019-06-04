@@ -10,7 +10,8 @@ class App extends Component {
     super()
     this.state = {
       currentUser: "Anonymous",
-      messages: messages
+      messages: messages,
+      inputValue: null
     }
     this.formUpdate = this.formUpdate.bind(this)
     this.onEnterPress = this.onEnterPress.bind(this)
@@ -36,13 +37,21 @@ class App extends Component {
     this.setState({messages: newMessageList})
   }
 
-  onEnterPress = (evt) => {
-    if(evt.keyCode == 13 && evt.shiftKey == false) {
-      evt.preventDefault()
-      const chatInput = evt.target.elements.chatInput.value
-      const userInput = evt.target.elements.userInput.value
+  onEnterPress = (event) => {
+    if(event.key === 'Enter') {
+      event.preventDefault()
+      let chatInput;
+      let userInput;
+      console.log(event.target.name)
+      event.target.name === 'chatInput' 
+      ? chatInput = event.target.value
+      : userInput = event.target.value;
       console.log(userInput, chatInput)
-      const newMessage = {username: userInput, content: chatInput}
+      let newMessage
+      chatInput 
+      ? newMessage={username: this.state.currentUser, content: chatInput}
+      : newMessage= {username: this.state.currentUser, content: `has changed their name to ${userInput}`};
+      userInput && this.setState({currentUser: userInput});
       const newMessageList = this.state.messages.concat(newMessage)
       this.setState({messages: newMessageList})
     }
