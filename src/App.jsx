@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Navbar from "./NavBar.jsx";
-import Message from "./Message.jsx";
 import MessageList from "./MessageList.jsx"
 import Chatbar from "./ChatBar.jsx";
 import messages from "./messages.json";
@@ -73,18 +72,11 @@ class App extends Component {
       const newMessageList = this.state.messages.concat(newMessage)
       this.setState({messages: newMessageList})
       const jsonList = JSON.stringify(newMessageList)
-      ws.send(jsonList)
+      this.ws.send(jsonList)
     }
   }
 
   render() {
-
-    const messageList = this.state.messages.map(message => (
-      <Message 
-        key={message.currentUser}
-        message={message} 
-        />
-    ))
 
     return (
       <div>
