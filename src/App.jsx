@@ -26,7 +26,6 @@ class App extends Component {
     const ws = new WebSocket("ws://localhost:3001")
     console.log("socket!")
     ws.onopen = () => {
-      this.sendJson()
       
       ws.onmessage = (event) => {
         let data = event.data
@@ -71,7 +70,7 @@ class App extends Component {
       console.log(newMessage)
       const newMessageList = this.state.messages.concat(newMessage)
 
-      const jsonList = JSON.stringify(newMessageList)
+      const jsonList = JSON.stringify(newMessage)
       this.ws.send(jsonList)
     }
   }
