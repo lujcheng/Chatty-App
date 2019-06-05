@@ -3,6 +3,8 @@ import Navbar from "./NavBar.jsx";
 import Message from "./Message.jsx";
 import Chatbar from "./ChatBar.jsx";
 import messages from "./messages.json";
+const parse = require('json-parse')
+
 
 
 class App extends Component {
@@ -19,12 +21,23 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      this.setState({messages: messages})
-    }, 3000);
+    const ws = new WebSocket("ws://localhost:3001")
+    console.log("socket!")
+    ws.onopen = () => {
+      const messageList = this.state.messages;
+      const jsonList = JSON.stringify(messageList)
+      console.log('Sending:', jsonList);
+      ws.send(jsonList);
+    };
+
+    ws.onmessage = (event) => {
+      console.log(event)
+      let data = event.data
+      const jsonData = JSON.parse(data)
+      console.log('Received:', jsonData);
+    };
+
+ 
   }
   
   formUpdate = evt => {
