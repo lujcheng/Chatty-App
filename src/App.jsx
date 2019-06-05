@@ -3,8 +3,8 @@ import Navbar from "./NavBar.jsx";
 import Message from "./Message.jsx";
 import Chatbar from "./ChatBar.jsx";
 import messages from "./messages.json";
+import uuidv1 from 'uuid/v1';
 const ws = new WebSocket("ws://localhost:3001")
-
 
 
 class App extends Component {
@@ -47,7 +47,7 @@ class App extends Component {
     const chatInput = evt.target.elements.chatInput.value
     const userInput = evt.target.elements.userInput.value
     console.log(userInput, chatInput)
-    const newMessage = {username: userInput, content: chatInput}
+    const newMessage = {id: uuidv1(), username: userInput, content: chatInput}
     const newMessageList = this.state.messages.concat(newMessage)
     this.setState({messages: newMessageList})
   }
@@ -64,7 +64,7 @@ class App extends Component {
       console.log(userInput, chatInput)
       let newMessage
       chatInput 
-      ? newMessage={username: this.state.currentUser, content: chatInput}
+      ? newMessage={id: uuidv1(), username: this.state.currentUser, content: chatInput}
       : newMessage= {username: this.state.currentUser, content: `has changed their name to ${userInput}`};
       userInput && this.setState({currentUser: userInput});
       const newMessageList = this.state.messages.concat(newMessage)

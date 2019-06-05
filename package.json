@@ -47,6 +47,7 @@
   "dependencies": {
     "json-parse": "^1.0.3",
     "react": "15.4.2",
-    "react-dom": "15.4.2"
+    "react-dom": "15.4.2",
+    "uuid": "^3.3.2"
   }
 }
