@@ -3,7 +3,7 @@ import Navbar from "./NavBar.jsx";
 import Message from "./Message.jsx";
 import Chatbar from "./ChatBar.jsx";
 import messages from "./messages.json";
-const parse = require('json-parse')
+const ws = new WebSocket("ws://localhost:3001")
 
 
 
@@ -17,29 +17,31 @@ class App extends Component {
     }
     this.formUpdate = this.formUpdate.bind(this)
     this.onEnterPress = this.onEnterPress.bind(this)
+    this.sendJson = this.sendJson.bind(this)
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    const ws = new WebSocket("ws://localhost:3001")
     console.log("socket!")
     ws.onopen = () => {
-      const messageList = this.state.messages;
-      const jsonList = JSON.stringify(messageList)
-      console.log('Sending:', jsonList);
-      ws.send(jsonList);
+      this.sendJson()
     };
 
     ws.onmessage = (event) => {
-      console.log(event)
       let data = event.data
+      console.log(data)
       const jsonData = JSON.parse(data)
       console.log('Received:', jsonData);
+      this.setState({messages: jsonData})
     };
-
- 
   }
-  
+  sendJson = () => {
+    const messageList = this.state.messages;
+      const jsonList = JSON.stringify(messageList)
+      console.log('Sending:', jsonList);
+      ws.send(jsonList);
+  }
+
   formUpdate = evt => {
     evt.preventDefault()
     const chatInput = evt.target.elements.chatInput.value
@@ -67,6 +69,8 @@ class App extends Component {
       userInput && this.setState({currentUser: userInput});
       const newMessageList = this.state.messages.concat(newMessage)
       this.setState({messages: newMessageList})
+      const jsonList = JSON.stringify(newMessageList)
+      ws.send(jsonList)
     }
   }
 
