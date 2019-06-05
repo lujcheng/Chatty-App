@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import Navbar from "./NavBar.jsx";
 import Message from "./Message.jsx";
+import MessageList from "./MessageList.jsx"
 import Chatbar from "./ChatBar.jsx";
 import messages from "./messages.json";
 import uuidv1 from 'uuid/v1';
-const ws = new WebSocket("ws://localhost:3001")
+
 
 
 class App extends Component {
@@ -19,9 +20,10 @@ class App extends Component {
     this.onEnterPress = this.onEnterPress.bind(this)
     this.sendJson = this.sendJson.bind(this)
   }
-
+  
   componentDidMount() {
     console.log("componentDidMount <App />");
+    const ws = new WebSocket("ws://localhost:3001")
     console.log("socket!")
     ws.onopen = () => {
       this.sendJson()
@@ -34,12 +36,13 @@ class App extends Component {
       console.log('Received:', jsonData);
       this.setState({messages: jsonData})
     };
+    this.ws = ws;
   }
   sendJson = () => {
     const messageList = this.state.messages;
       const jsonList = JSON.stringify(messageList)
       console.log('Sending:', jsonList);
-      ws.send(jsonList);
+      this.ws.send(jsonList);
   }
 
   formUpdate = evt => {
@@ -55,18 +58,18 @@ class App extends Component {
   onEnterPress = (event) => {
     if(event.key === 'Enter') {
       event.preventDefault()
-      let chatInput;
-      let userInput;
-      console.log(event.target.name)
-      event.target.name === 'chatInput' 
-      ? chatInput = event.target.value
-      : userInput = event.target.value;
-      console.log(userInput, chatInput)
+      let messageType;
       let newMessage
-      chatInput 
-      ? newMessage={id: uuidv1(), username: this.state.currentUser, content: chatInput}
-      : newMessage= {username: this.state.currentUser, content: `has changed their name to ${userInput}`};
-      userInput && this.setState({currentUser: userInput});
+      const form = event.target
+      console.log(event.target.name)
+      form.name === 'chatInput' ? messageType = "incomingMessage" : messageType = "incomingNotification"
+  
+      messageType === 'incomingMessage' ? 
+      newMessage={id: uuidv1(), username: this.state.currentUser, content: form.value, type: messageType}
+      : newMessage= {username: form.value, type: messageType, content: `${this.state.currentUser} has changed their name to ${form.value}`};
+
+      messageType === 'incomingNotification' && this.setState({currentUser: form.value});
+      console.log(newMessage)
       const newMessageList = this.state.messages.concat(newMessage)
       this.setState({messages: newMessageList})
       const jsonList = JSON.stringify(newMessageList)
@@ -86,9 +89,7 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        <main className="messages">
-        {messageList}
-        </main>
+        <MessageList messages={this.state.messages} currentUser={this.state.currentUser} />
         <Chatbar formUpdate={this.formUpdate} onEnterPress={this.onEnterPress} />
       </div>
     );
