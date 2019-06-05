@@ -12,8 +12,9 @@ class App extends Component {
     super()
     this.state = {
       currentUser: "Anonymous",
-      messages: messages,
-      inputValue: null
+      messages: [],
+      inputValue: null,
+      connections: 0
     }
     this.formUpdate = this.formUpdate.bind(this)
     this.onEnterPress = this.onEnterPress.bind(this)
@@ -26,16 +27,16 @@ class App extends Component {
     console.log("socket!")
     ws.onopen = () => {
       this.sendJson()
+      
+      ws.onmessage = (event) => {
+        let data = event.data
+        console.log(event)
+        const jsonData = JSON.parse(data)
+        console.log('Received:', jsonData.messages);
+        this.setState({messages: jsonData.messages, connections: jsonData.connectionNumber})
+      };
     };
-
-    ws.onmessage = (event) => {
-      let data = event.data
-      console.log(data)
-      const jsonData = JSON.parse(data)
-      console.log('Received:', jsonData);
-      this.setState({messages: jsonData})
-    };
-    this.ws = ws;
+      this.ws = ws;
   }
   sendJson = () => {
     const messageList = this.state.messages;
@@ -48,7 +49,6 @@ class App extends Component {
     evt.preventDefault()
     const chatInput = evt.target.elements.chatInput.value
     const userInput = evt.target.elements.userInput.value
-    console.log(userInput, chatInput)
     const newMessage = {id: uuidv1(), username: userInput, content: chatInput}
     const newMessageList = this.state.messages.concat(newMessage)
     this.setState({messages: newMessageList})
@@ -60,7 +60,7 @@ class App extends Component {
       let messageType;
       let newMessage
       const form = event.target
-      console.log(event.target.name)
+
       form.name === 'chatInput' ? messageType = "incomingMessage" : messageType = "incomingNotification"
   
       messageType === 'incomingMessage' ? 
@@ -70,7 +70,7 @@ class App extends Component {
       messageType === 'incomingNotification' && this.setState({currentUser: form.value});
       console.log(newMessage)
       const newMessageList = this.state.messages.concat(newMessage)
-      this.setState({messages: newMessageList})
+
       const jsonList = JSON.stringify(newMessageList)
       this.ws.send(jsonList)
     }
@@ -80,7 +80,7 @@ class App extends Component {
 
     return (
       <div>
-        <Navbar />
+        <Navbar connections={this.state.connections} />
         <MessageList messages={this.state.messages} currentUser={this.state.currentUser} />
         <Chatbar formUpdate={this.formUpdate} onEnterPress={this.onEnterPress} />
       </div>
