@@ -2,18 +2,7 @@ import React, {Component} from 'react';
 import Image from './Image.jsx';
 
 class Message extends Component {
-    constructor() {
-        super()
-        this.findURL.bind(this)
-    }
-    findURL = (content) => {
-        const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g;
-        return content.replace(regex, function(url) {
-            return '<img src="http://pngimg.com/uploads/arctic_fox/arctic_fox_PNG41386.png" />'
-        })
-    }
     render() {
-
         const style = {
             color: this.props.message.userColor
         }

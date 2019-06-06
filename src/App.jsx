@@ -27,7 +27,6 @@ class App extends Component {
   componentDidMount() {
     console.log("componentDidMount <App />");
     const ws = new WebSocket("ws://localhost:3001")
-    console.log("socket!")
     ws.onopen = () => {
       
       ws.onmessage = (event) => {
@@ -35,7 +34,7 @@ class App extends Component {
         console.log(data)
         const jsonData = JSON.parse(data)
         jsonData.chatColor && this.setState({userColor: jsonData.chatColor})
-        console.log('Received:', jsonData.messages);
+        console.log('Received:');
         this.setState({messages: jsonData.messages, connections: jsonData.connectionNumber, userColor: this.state.userColor})
       };
     };
