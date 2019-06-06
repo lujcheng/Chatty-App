@@ -20,7 +20,6 @@ class App extends Component {
     }
     this.formUpdate = this.formUpdate.bind(this)
     this.onEnterPress = this.onEnterPress.bind(this)
-    this.sendJson = this.sendJson.bind(this)
   }
   
   componentDidMount() {
@@ -40,12 +39,7 @@ class App extends Component {
     };
       this.ws = ws;
   }
-  sendJson = () => {
-    const messageList = this.state.messages;
-      const jsonList = JSON.stringify(messageList)
-      console.log('Sending:', jsonList);
-      this.ws.send(jsonList);
-  }
+
 
   formUpdate = evt => {
     evt.preventDefault()
