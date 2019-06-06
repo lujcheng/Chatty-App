@@ -15,11 +15,13 @@ class App extends Component {
       currentUser: "Anonymous",
       messages: [],
       userColor: null,
-      inputValue: null,
+      userValue: 'Anonymous',
+      chatValue: null,
       connections: 0
     }
     this.formUpdate = this.formUpdate.bind(this)
     this.onEnterPress = this.onEnterPress.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
   
   componentDidMount() {
@@ -50,9 +52,13 @@ class App extends Component {
     this.setState({messages: newMessageList})
   }
 
+  onChange = (event) => {
+    event.target.name === 'chatInput' ? this.setState({chatValue: event.target.value}) : this.setState({userValue: event.target.value})
+  }
+
   onEnterPress = (event) => {
     if(event.key === 'Enter') {
-      event.preventDefault()
+      console.log("enter")
       let messageType;
       let newMessage
       const form = event.target
@@ -77,7 +83,7 @@ class App extends Component {
       <div>
         <Navbar connections={this.state.connections} />
         <MessageList messages={this.state.messages} currentUser={this.state.currentUser} userColor={this.state.userColor} />
-        <Chatbar formUpdate={this.formUpdate} onEnterPress={this.onEnterPress} />
+        <Chatbar onChange={this.onChange} onEnterPress={this.onEnterPress} userValue={this.state.userValue} chatValue={this.state.chatValue} />
       </div>
     );
     }

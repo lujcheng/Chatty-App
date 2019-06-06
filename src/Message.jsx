@@ -22,16 +22,18 @@ class Message extends Component {
         let newImageArr = null;
         let newContent = null;
         let imageDisplay = null;
-        if (phrase.search(regex) > 0) {
-        newImageArr = phrase.match(regex),
-        newContent = phrase.replace(regex, ""),
-        imageDisplay = newImageArr.map((url) => {return <Image imgURL={url} />})
+        console.log(phrase.search(regex) >= 0)
+        if (phrase.search(regex) >= 0) {
+            newImageArr = phrase.match(regex);
+            phrase = phrase.replace(regex, "");
+            imageDisplay = newImageArr.map((url) => {return <Image imgURL={url} />});
         }
+
         return (    
                 <div className="message">
                 <span className="message-username" style={style}>{this.props.message.username}</span>
                 <span className="message-content"> 
-                 <p>{newContent}</p>
+                 <p>{phrase}</p>
                  {imageDisplay}
                 </span>
                 </div>
