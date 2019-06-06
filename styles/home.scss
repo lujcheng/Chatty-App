@@ -61,6 +61,10 @@ body {
   flex: 8;
 }
 
+.message-content p {
+  margin: 0;
+}
+
 .message-username {
   flex: 2;
   font-weight: 700;

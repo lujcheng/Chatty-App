@@ -11,7 +11,6 @@ class Message extends Component {
         let newImageArr = null;
         let newContent = null;
         let imageDisplay = null;
-        console.log(phrase.search(regex) >= 0)
         if (phrase.search(regex) >= 0) {
             newImageArr = phrase.match(regex);
             phrase = phrase.replace(regex, "");
@@ -19,11 +18,13 @@ class Message extends Component {
         }
 
         return (    
-                <div className="message">
-                <span className="message-username" style={style}>{this.props.message.username}</span>
+                <div className="message" id={this.props.message.id}>
+                <span className="message-username" style={style}>
+                    {this.props.message.username}
+                </span>
                 <span className="message-content"> 
-                 <p>{phrase}</p>
-                 {imageDisplay}
+                    <p>{phrase}</p>
+                    {imageDisplay}
                 </span>
                 </div>
         )
@@ -33,7 +34,9 @@ class Message extends Component {
 class Notification extends Component {
     render() {
         return (
-            <div className="message system">{this.props.message.content}</div>
+            <div className="message system" id={this.props.message.id}>
+                {this.props.message.content}
+            </div>
         )
     }
 }

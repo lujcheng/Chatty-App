@@ -8,8 +8,12 @@ class Navbar extends Component {
         }
         return (
             <nav className="navbar" style={style} >
-                <a href="/" className="navbar-brand">Chatty</a>
-                <span className="navbar-brand" style={{fontSize: "1em"}}>{this.props.connections} users currently online </span>
+                <a href="/" className="navbar-brand">
+                    Chatty
+                </a>
+                <span className="navbar-brand" style={{fontSize: "1em"}}>
+                    {this.props.connections} users currently online 
+                </span>
             </nav>
         )
     }

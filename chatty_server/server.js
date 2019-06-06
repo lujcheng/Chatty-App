@@ -34,7 +34,6 @@ wss.on('connection', (ws) => {
     return jsonMessage
   }
   wss.broadcast = function broadcast(data) {
-    console.log("chat history", chatHistory)
     wss.clients.forEach(function each(client) {
       console.log("sending...")
       if (client.readyState === ws.OPEN) {
@@ -51,7 +50,6 @@ wss.on('connection', (ws) => {
     chatHistory.push(parsedMessages)
     wss.broadcast(createObjNSend())
         console.log("data sent!")
-    
   })
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
