@@ -21,10 +21,11 @@ const chatColors = ["#EF2E24", "#2DCC1F", "#1F2FCC", "#BE1FCC"]
 let count = 0
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  // defining variables and functions to broadcast
+  // defining variables and functions for user color
   count ++
   const chatColor = {chatColor: chatColors[count % 4]}
   ws.send(JSON.stringify(chatColor))
+  // store variables to send to client
   function createObjNSend() {
     const dataObj = {
       messages: chatHistory,
@@ -33,6 +34,7 @@ wss.on('connection', (ws) => {
     const jsonMessage = JSON.stringify(dataObj)
     return jsonMessage
   }
+  // broadcasts to all connected users
   wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
       console.log("sending...")
@@ -42,11 +44,12 @@ wss.on('connection', (ws) => {
       }
     })
   }
-  // broadcasting
+  // broadcasting call
   wss.broadcast(createObjNSend());
   ws.on('message', (event) => {
     console.log("message received")
     const parsedMessages = JSON.parse(event)
+    // keeping chat history
     chatHistory.push(parsedMessages)
     wss.broadcast(createObjNSend())
         console.log("data sent!")

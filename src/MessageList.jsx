@@ -3,6 +3,7 @@ import {Message, Notification} from './Message.jsx';
 
 class MessageList extends Component {
   render() {
+    // map data to create message or notification components
     const messageList = this.props.messages.map(message => {
       if (message.type == 'incomingMessage') {
         return <Message message={message} userColor={this.props.userColor} />

@@ -27,32 +27,35 @@ class App extends Component {
     ws.onopen = () => {
       ws.onmessage = (event) => {
         let data = event.data
-        console.log(data)
         const jsonData = JSON.parse(data)
+        // setting username color state variable with socket data
         jsonData.chatColor && this.setState({userColor: jsonData.chatColor})
         console.log('Received:');
+        // set state for concatenated messagelist from websocket server
         this.setState({messages: jsonData.messages, connections: jsonData.connectionNumber, userColor: this.state.userColor})
       };
     };
       this.ws = ws;
   }
 
+  // used for controlled input, set state on input change
   onChange = (event) => {
     event.target.name === 'chatInput' ? this.setState({chatValue: event.target.value}) : this.setState({userValue: event.target.value})
   }
 
+  // enter to submit message
   onEnterPress = (event) => {
     if(event.key === 'Enter') {
       let messageType;
       let newMessage
       const form = event.target
-
+      // determines message type
       form.name === 'chatInput' ? messageType = "incomingMessage" : messageType = "incomingNotification"
-
+      // creating object structure for message based on message type
       messageType === 'incomingMessage' ? 
       newMessage={id: uuidv1(), username: this.state.currentUser, content: form.value, type: messageType, userColor: this.state.userColor}
       : newMessage= {id: uuidv1(), username: form.value, type: messageType, content: `${this.state.currentUser} has changed their name to ${form.value}`}
-
+      // change current user state upon username input
       messageType === 'incomingNotification' && this.setState({currentUser: form.value})
 
       const jsonList = JSON.stringify(newMessage)

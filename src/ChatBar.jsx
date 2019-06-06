@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+// chat bar holds values for username message input, both use controlled inputs
 class Chatbar extends Component {
     render() {
         return (
