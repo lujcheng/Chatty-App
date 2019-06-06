@@ -4,6 +4,7 @@ import MessageList from "./MessageList.jsx"
 import Chatbar from "./ChatBar.jsx";
 import messages from "./messages.json";
 import uuidv1 from 'uuid/v1';
+import { EEXIST } from 'constants';
 
 
 
@@ -13,6 +14,7 @@ class App extends Component {
     this.state = {
       currentUser: "Anonymous",
       messages: [],
+      userColor: null,
       inputValue: null,
       connections: 0
     }
@@ -29,10 +31,11 @@ class App extends Component {
       
       ws.onmessage = (event) => {
         let data = event.data
-        console.log(event)
+        console.log(data)
         const jsonData = JSON.parse(data)
+        jsonData.chatColor && this.setState({userColor: jsonData.chatColor})
         console.log('Received:', jsonData.messages);
-        this.setState({messages: jsonData.messages, connections: jsonData.connectionNumber})
+        this.setState({messages: jsonData.messages, connections: jsonData.connectionNumber, userColor: this.state.userColor})
       };
     };
       this.ws = ws;
@@ -63,7 +66,7 @@ class App extends Component {
       form.name === 'chatInput' ? messageType = "incomingMessage" : messageType = "incomingNotification"
   
       messageType === 'incomingMessage' ? 
-      newMessage={id: uuidv1(), username: this.state.currentUser, content: form.value, type: messageType}
+      newMessage={id: uuidv1(), username: this.state.currentUser, content: form.value, type: messageType, userColor: this.state.userColor}
       : newMessage= {username: form.value, type: messageType, content: `${this.state.currentUser} has changed their name to ${form.value}`};
 
       messageType === 'incomingNotification' && this.setState({currentUser: form.value});
@@ -80,7 +83,7 @@ class App extends Component {
     return (
       <div>
         <Navbar connections={this.state.connections} />
-        <MessageList messages={this.state.messages} currentUser={this.state.currentUser} />
+        <MessageList messages={this.state.messages} currentUser={this.state.currentUser} userColor={this.state.userColor} />
         <Chatbar formUpdate={this.formUpdate} onEnterPress={this.onEnterPress} />
       </div>
     );

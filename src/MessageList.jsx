@@ -6,7 +6,7 @@ class MessageList extends Component {
     const messageList = this.props.messages.map(message => {
   
       if (message.type == 'incomingMessage') {
-    {return <Message message={message} />}
+    {return <Message message={message} userColor={this.props.userColor} />}
       } else {
         {return <Notification message={message} />}
       }
