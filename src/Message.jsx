@@ -7,9 +7,9 @@ class Message extends Component {
         this.findURL.bind(this)
     }
     findURL = (content) => {
-        const regex = /(https?:\/\/[^\s]+)/g;
+        const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g;
         return content.replace(regex, function(url) {
-            return <img src={url} />
+            return '<img src="http://pngimg.com/uploads/arctic_fox/arctic_fox_PNG41386.png" />'
         })
     }
     render() {
@@ -17,13 +17,23 @@ class Message extends Component {
         const style = {
             color: this.props.message.userColor
         }
-        const newContent = this.findURL(this.props.message.content)
-        console.log("new content", this.props.message.content)
-        console.log("after function", newContent)
+        let phrase = this.props.message.content
+        const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g;
+        let newImageArr = null;
+        let newContent = null;
+        let imageDisplay = null;
+        if (phrase.search(regex) > 0) {
+        newImageArr = phrase.match(regex),
+        newContent = phrase.replace(regex, ""),
+        imageDisplay = newImageArr.map((url) => {return <Image imgURL={url} />})
+        }
         return (    
                 <div className="message">
                 <span className="message-username" style={style}>{this.props.message.username}</span>
-                <span className="message-content"> {newContent} </span>
+                <span className="message-content"> 
+                 <p>{newContent}</p>
+                 {imageDisplay}
+                </span>
                 </div>
         )
     }

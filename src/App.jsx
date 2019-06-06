@@ -65,7 +65,6 @@ class App extends Component {
 
       messageType === 'incomingNotification' && this.setState({currentUser: form.value});
       console.log(newMessage)
-      const newMessageList = this.state.messages.concat(newMessage)
 
       const jsonList = JSON.stringify(newMessage)
       this.ws.send(jsonList)
